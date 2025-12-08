@@ -5,7 +5,7 @@ import { pageFixture } from './browserContextFixture';
 let browser: Browser;
 
 Before(async function () {
-  browser = await chromium.launch({ headless: false });
+  browser = await chromium.launch({ headless: true });
   pageFixture.context = await browser.newContext({ viewport: { width: 1920, height: 1080 } });
   pageFixture.page = await pageFixture.context.newPage();
 });
