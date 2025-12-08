@@ -19,7 +19,8 @@ When('I type a comment', async () => {
 });
 
 When('I click on the submit button', async () => {
-  await pageFixture.page.getByRole('button', { name: 'SUBMIT' }).click(); // input[value="SUBMIT"]
+  await pageFixture.page.waitForSelector('input[value="SUBMIT"]', { timeout: 10000 });
+  await pageFixture.page.locator('input[value="SUBMIT"]').click(); // getByRole('button', { name: 'SUBMIT' })
 });
 
 Then('I should be presented with a successful contact us submission message', async () => {
@@ -31,5 +32,21 @@ Then('I should be presented with a successful contact us submission message', as
 Then('I should be presented with a unsuccessful contact us message', async () => {
   await pageFixture.page.waitForSelector('body', { timeout: 10000 });
   const bodyText = await pageFixture.page.innerText('body');
-  expect(bodyText).toMatch(/Error: (all fields are reqiured|Invalid email address)/);
+  expect(bodyText).toMatch(/Error: (all fields are required|Invalid email address)/);
 });
+
+When('I type a specific first name {string}', async (firstName: string) => {
+  await pageFixture.page.getByPlaceholder('First Name').fill(firstName);
+});
+When('I type a specific last name {string}', async (lastName: string) => {
+  await pageFixture.page.getByPlaceholder('Last Name').fill(lastName);
+});
+When('I enter a specific email address {string}', async (email: string) => {
+  await pageFixture.page.getByPlaceholder('Email Address').fill(email);
+});
+When(
+  'I type a specific text {string} and number {int} within the comment input field',
+  async (text: string, number: number) => {
+    await pageFixture.page.getByPlaceholder('Comments').fill(`${text}  ${number}`);
+  },
+);
