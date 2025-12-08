@@ -1,0 +1,19 @@
+{
+  "name": "cucumber_project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "cucumberWithTS": " npx cucumber-js src/features/*.feature --require-module ts-node/register --require src/step-definitions/**/**/*.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@cucumber/cucumber": "^12.3.0",
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^24.10.1",
+    "ts-node": "^10.9.2"
+  }
+}
