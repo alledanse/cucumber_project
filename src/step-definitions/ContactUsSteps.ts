@@ -64,3 +64,35 @@ When('I enter a random email address', async () => {
   const randomEmail = faker.internet.email();
   await pageFixture.page.getByPlaceholder('Email Address').fill(randomEmail);
 });
+
+When(
+  'I type a first name {word} and a last name {word}',
+  async (firstName: string, lastName: string) => {
+    await pageFixture.page.getByPlaceholder('First Name').fill(firstName);
+    await pageFixture.page.getByPlaceholder('Last Name').fill(lastName);
+  },
+);
+
+When(
+  'I type a email address {string} and a comment {string}',
+  async (email: string, comment: string) => {
+    await pageFixture.page.getByPlaceholder('Email Address').fill(email);
+    await pageFixture.page.getByPlaceholder('Comments').fill(comment);
+  },
+);
+
+Then('I should be presented with a header text {string}', async (message: string) => {
+  await pageFixture.page.waitForSelector('//h1 | //body', { state: 'visible' });
+  const elements = await pageFixture.page.locator('//h1 | //body').elementHandles();
+  let foundElementText = '';
+
+  for (let element of elements) {
+    let text = await element.innerText();
+
+    if (text.includes(message)) {
+      foundElementText = text;
+      break;
+    }
+  }
+  expect(foundElementText).toContain(message);
+});
