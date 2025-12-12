@@ -1,3 +1,4 @@
+@regression @login
 Feature: Webdriver university - Login Page
 
     Scenario Outline: Validate valid & invalid login page
@@ -13,3 +14,7 @@ Feature: Webdriver university - Login Page
             | username  | password     | expectedAlertText    |
             | webdriver | webdriver123 | validation succeeded |
             | webdriver | Password123  | validation failed    |
+
+        @smoke
+        Examples:
+            | username | password | expectedAlertText |

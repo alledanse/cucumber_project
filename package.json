@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "cucumberWithTS": " npx cucumber-js src/features/*.feature --require-module ts-node/register --require src/step-definitions/**/**/*.ts"
+    "cucumberWithTS": "npx cucumber-js src/features/*.feature --require-module ts-node/register --require src/step-definitions/**/**/*.ts",
+    "cucumber": "npx cucumber-js && ts-node ./src/index.ts"
   },
   "keywords": [],
   "author": "",
