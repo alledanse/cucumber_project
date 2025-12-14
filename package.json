@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "cucumberWithTS": "npx cucumber-js src/features/*.feature --require-module ts-node/register --require src/step-definitions/**/**/*.ts",
+    "precucumber": "rimraf reports && mkdir reports",
     "cucumber": "npx cucumber-js && ts-node ./src/index.ts"
   },
   "keywords": [],
@@ -16,6 +17,7 @@
     "@faker-js/faker": "^10.1.0",
     "@playwright/test": "^1.57.0",
     "@types/node": "^24.10.1",
+    "rimraf": "^6.1.2",
     "ts-node": "^10.9.2"
   }
 }

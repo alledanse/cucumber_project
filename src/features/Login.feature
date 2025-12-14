@@ -17,4 +17,5 @@ Feature: Webdriver university - Login Page
 
         @smoke
         Examples:
-            | username | password | expectedAlertText |
+            | username  | password     | expectedAlertText    |
+            | webdriver | webdriver123 | validation succeeded |

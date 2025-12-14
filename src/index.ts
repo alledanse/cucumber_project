@@ -2,7 +2,10 @@ import { exec } from 'child_process';
 
 const common = `./src/features/*.feature \
 --require-module ts-node/register \
---require ./src/step-definitions/**/**/*.ts`;
+--require ./src/step-definitions/**/**/*.ts \
+-f json:./reports/report.json \
+--format html:./reports/report.html
+`;
 
 interface ProfileCommands {
   [key: string]: string;
