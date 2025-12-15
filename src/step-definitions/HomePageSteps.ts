@@ -1,5 +1,13 @@
 import { Given, When } from '@cucumber/cucumber';
 import { pageFixture } from './hooks/browserContextFixture';
+import { config as loadEnv } from 'dotenv';
+
+const env = loadEnv({ path: './env/.env' });
+
+const config = {
+  width: parseInt(env.parsed?.BROWSER_WIDTH || '1920'),
+  height: parseInt(env.parsed?.BROWSER_HEIGHT || '1080'),
+};
 
 const url = 'https://www.webdriveruniversity.com';
 
@@ -22,10 +30,10 @@ When('I click on the login portal button', async () => {
 });
 
 When('I switch the new browser tab', async () => {
-  await pageFixture.context.waitForEvent('page');
+  await pageFixture.context.waitForEvent('page', { timeout: 10000 });
 
   const allPages = pageFixture.context.pages();
   pageFixture.page = allPages[allPages.length - 1];
   await pageFixture.page.bringToFront();
-  await pageFixture.page.setViewportSize({ width: 1920, height: 1080 });
+  await pageFixture.page.setViewportSize({ width: config.width, height: config.height });
 });

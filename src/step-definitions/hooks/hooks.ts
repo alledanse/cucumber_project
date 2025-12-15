@@ -1,13 +1,56 @@
-import { After, Before, Status } from '@cucumber/cucumber';
-import { Browser, chromium } from '@playwright/test';
+import { After, AfterAll, Before, BeforeAll, Status } from '@cucumber/cucumber';
+import { Browser, BrowserType, chromium, firefox, webkit } from '@playwright/test';
 import { pageFixture } from './browserContextFixture';
 
-let browser: Browser;
+import { config as loadEnv } from 'dotenv';
+const env = loadEnv({ path: './env/.env' });
+
+const config = {
+  headless: env.parsed?.HEADLESS === 'true',
+  browser: env.parsed?.UI_AUTOMATION_BROWSER || 'chromium',
+  width: parseInt(env.parsed?.BROWSER_WIDTH || '1920'),
+  height: parseInt(env.parsed?.BROWSER_HEIGHT || '1080'),
+};
+
+const browsers: { [key: string]: BrowserType } = {
+  chromium: chromium,
+  firefox: firefox,
+  webkit: webkit,
+};
+
+let browserInstance: Browser | null = null;
+
+async function initializeBrowserContext(selectedBrowser: string): Promise<Browser> {
+  const launchBrowser = browsers[selectedBrowser];
+  if (!launchBrowser) {
+    throw new Error(`Invalid browser selected: ${selectedBrowser}`);
+  }
+  return await launchBrowser.launch({ headless: config.headless });
+}
+
+async function initializePage(): Promise<void> {
+  if (!browserInstance) {
+    throw new Error('Browser instance is null');
+  }
+  pageFixture.context = await browserInstance.newContext({
+    ignoreHTTPSErrors: true,
+  });
+  pageFixture.page = await pageFixture.context.newPage();
+  await pageFixture.page.setViewportSize({ width: config.width, height: config.height });
+}
+
+// BeforeAll(async function (params: type) {});
+
+// AfterAll(async function (params: type) {});
 
 Before(async function () {
-  browser = await chromium.launch({ headless: true });
-  pageFixture.context = await browser.newContext({ viewport: { width: 1920, height: 1080 } });
-  pageFixture.page = await pageFixture.context.newPage();
+  try {
+    browserInstance = await initializeBrowserContext(config.browser);
+    console.log(`Browser context initialized for: ${config.browser}`);
+    await initializePage();
+  } catch (error) {
+    console.error('Browser context initialized failed:', error);
+  }
 });
 
 After(async function ({ pickle, result }) {
@@ -24,6 +67,8 @@ After(async function ({ pickle, result }) {
       console.error('pageFixture.page is undefined');
     }
   }
-  await pageFixture.page.close();
-  await browser.close();
+  if (browserInstance) {
+    await pageFixture?.page.close();
+    await browserInstance.close();
+  }
 });
