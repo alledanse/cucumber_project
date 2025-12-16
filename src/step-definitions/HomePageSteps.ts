@@ -1,6 +1,7 @@
 import { Given, When } from '@cucumber/cucumber';
 import { pageFixture } from './hooks/browserContextFixture';
 import { config as loadEnv } from 'dotenv';
+import logger from '../logger/logger';
 
 const env = loadEnv({ path: './env/.env' });
 
@@ -12,7 +13,12 @@ const config = {
 const url = 'https://www.webdriveruniversity.com';
 
 Given('I navigate to the webdriveruniversity homepage', async () => {
-  await pageFixture.page.goto(url);
+  try {
+    await pageFixture.page.goto(url);
+    logger.info(`Accessing URL: ${url}`);
+  } catch (error) {
+    logger.error(`An error has occured: ${error.message}`);
+  }
 });
 
 When('I click on the contact us button', async () => {
