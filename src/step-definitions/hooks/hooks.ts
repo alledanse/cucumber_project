@@ -52,6 +52,7 @@ Before(async function () {
 
     this.pageManager = new PageManager();
     this.basePage = this.pageManamger.createBasePage();
+    this.contactUsPage = this.pageManager.createContactUsPage();
   } catch (error) {
     console.error('Browser context initialized failed:', error);
   }

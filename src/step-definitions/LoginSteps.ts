@@ -6,12 +6,12 @@ let alertText: string;
 
 When('I type a username {word}', async (username: string) => {
   await pageFixture.page.getByPlaceholder('Username').fill(username);
-  await pageFixture.page.waitForTimeout(2000);
+  await pageFixture.page.waitForTimeout(1000);
 });
 
 When('I type a password {word}', async (password: string) => {
   await pageFixture.page.getByPlaceholder('Password').fill(password);
-  await pageFixture.page.waitForTimeout(2000);
+  await pageFixture.page.waitForTimeout(1000);
 });
 
 When('I click on the login button', async () => {
@@ -23,7 +23,7 @@ When('I click on the login button', async () => {
   const loginButton = pageFixture.page.locator('#login-button');
   await loginButton.hover();
   await loginButton.click({ force: true });
-  await pageFixture.page.waitForTimeout(2000);
+  await pageFixture.page.waitForTimeout(1000);
 });
 
 Then(
