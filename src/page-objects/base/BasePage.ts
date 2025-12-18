@@ -1,0 +1,40 @@
+import { Page, Locator } from '@playwright/test';
+import { pageFixture } from '../../step-definitions/hooks/browserContextFixture';
+import { config as loadEnv } from 'dotenv';
+const env = loadEnv({ path: './env/.env' });
+
+const config = {
+  width: parseInt(env.parsed?.BROWSER_WIDTH || '1920'),
+  height: parseInt(env.parsed?.BROWSER_HEIGHT || '1080'),
+};
+
+export class BasePage {
+  get page() {
+    return pageFixture.page;
+  }
+
+  public async navigate(url: string): Promise<void> {
+    await this.page.goto(url);
+  }
+
+  public async wailtAndClickByRole(role: string, name: string): Promise<void> {
+    const element = await this.page.getByRole(role as any, { name: name });
+    await element.click();
+  }
+  public async wailtAndClick(locator: Locator): Promise<void> {
+    await locator.isVisible();
+    await locator.click();
+  }
+  public async wailtAndClickSelector(selector: string): Promise<void> {
+    await this.page.waitForSelector(selector);
+    await this.page.click(selector);
+  }
+  public async switchToTheNewTab(): Promise<void> {
+    await this.page.context().waitForEvent('page', { timeout: 10000 });
+
+    const allPages = this.page.context().pages();
+    pageFixture.page = allPages[allPages.length - 1];
+    await this.page.bringToFront();
+    await this.page.setViewportSize({ width: config.width, height: config.height });
+  }
+}
