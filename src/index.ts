@@ -2,10 +2,10 @@ import { exec } from 'child_process';
 
 const common = `./src/features/*.feature \
 --require-module ts-node/register \
---require ./src/step-definitions/**/**/*.ts \
--f json:./reports/report.json \
---format html:./reports/report.html
-`;
+--require ./src/step-definitions/**/**/*.ts`;
+
+// --format json:./reports/report.json \
+// --format html:./reports/report.html
 
 interface ProfileCommands {
   [key: string]: string;
@@ -23,6 +23,7 @@ const profile = process.argv[2];
 let command = `npx cucumber-js ${
   profiles[profile as 'smoke' | 'regression' | 'login' | 'contact-us']
 }`;
+console.log(command);
 
 exec(command, { encoding: 'utf-8' }, (error: Error | null, stdout: string) => {
   console.log(stdout);
